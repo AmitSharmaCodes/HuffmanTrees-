@@ -30,17 +30,17 @@ public:
      *  We want small counts to have high priority.
      *  And we want to break ties deterministically.
      */
-    bool operator<(const HCNode& other);
+    bool operator<(const HCNode& other) const;
 };
 
 /** For printing an HCNode to an ostream
  *  Possibly useful for debugging.
  */
-ostream& operator<<(ostream&, const HCNode&) __attribute__((weak)); // shut the linker up
-ostream& operator<<(ostream& stm, const HCNode& n) {
+//ostream& operator<<(ostream&, const HCNode&); __attribute__((weak)); // shut the linker up
+/*ostream& operator<<(ostream& stm, const HCNode& n) {
     stm << "[" << n.count << "," << (int) (n.symbol) << "]";
     return stm;
-}
+}*/
 
 bool comp(HCNode* one, HCNode* other);
 
