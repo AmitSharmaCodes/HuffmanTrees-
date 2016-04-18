@@ -5,41 +5,51 @@
 #include "HCTree.hpp"
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
+	//Check for Arguments
+	if (argc != 3) {
+		cout << "Invalid number of arguments.\n"
+			<< "Usage: ./main <input filename> <output filename>.\n";
+		return -1;
+	}
+
 	HCTree trie;
 	vector<int> freq(256);
 	ifstream f;
-	f.open("C:\\Users\\ashar_000\\Desktop\\Workspace\\CSE100\\PA2\\repo_st_733_4844_14410_pa2_huffman\\t.txt");
+	//open the input file and get all the frequencies
+	f.open(argv[1]);
 	unsigned char nextChar;
 	int nextByte;
 	while ((nextByte = f.get()) != EOF) {
 		nextChar = (unsigned char)nextByte;
-		cout << nextByte << ": " << nextChar << endl;
+	//	cout << nextByte << ": " << nextChar << endl;
 		++freq[nextByte];
 	}
 	f.close();
-	
-	ofstream o;
-	o.open("C:\\Users\\ashar_000\\Desktop\\Workspace\\CSE100\\PA2\\repo_st_733_4844_14410_pa2_huffman\\output.txt");
-	if (o.is_open())
-		cout << "OPENED" << endl;
 
+	//build huff trie
 	trie.build(freq);
-	f.open("C:\\Users\\ashar_000\\Desktop\\Workspace\\CSE100\\PA2\\repo_st_733_4844_14410_pa2_huffman\\t.txt");
+	
+	//open output file
+	ofstream o;
+	o.open(argv[2]);
+	if (!o.is_open())
+		cout << "NOT OPENED" << endl;
+	//write the header
+	for (int i = 0; i < freq.size(); ++i)
+		o << freq[i] << endl;
+
+	//open input file again
+	f.open(argv[1]);
+
+	//encode 
 	while ((nextByte = f.get()) != EOF) {
 		nextChar = (unsigned char)nextByte;
 		trie.encode(nextChar, o);
 	}
 	f.close();
 	o.close();
-
-	f.open("C:\\Users\\ashar_000\\Desktop\\Workspace\\CSE100\\PA2\\repo_st_733_4844_14410_pa2_huffman\\output.txt");
-	while ((nextByte = trie.decode(f))) {
-		
-		nextChar = (unsigned char)nextByte;
-		cout << nextByte << ": " << nextChar << endl;
-	}
 
 	return 0;
 }
