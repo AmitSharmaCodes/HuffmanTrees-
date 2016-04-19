@@ -1,6 +1,8 @@
 #include <iostream>
-#include "HCTree.hpp"
+#include <fstream>
+#include <string>
 #include <vector>
+#include "HCTree.hpp"
 
 using namespace std;
 
@@ -11,7 +13,7 @@ int main(int argc, char* argv[])
 	ifstream f;
 
 	//Check for Arguments
-	if (argc != 2) {
+	if (argc != 3) {
 		cout << "Invalid number of arguments.\n"
 			<< "Usage: ./main <input filename> <output filename>.\n";
 		return -1;
@@ -20,9 +22,11 @@ int main(int argc, char* argv[])
 	f.open(argv[1]);
 	
 	int frequency = 0;
+	string s;
 	for (int i = 0; i < freq.size(); ++i)
 	{
-		frequency = f.get();
+		getline(f, s);
+		frequency = stoi(s);
 		freq[i] = frequency;
 	}
 	trie.build(freq);
