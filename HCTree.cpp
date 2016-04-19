@@ -1,8 +1,19 @@
 #include "HCTree.hpp"
 #include <string>
 
+//recursively delete all the nodes
+void HCTree::deleteAll(HCNode * n)
+{
+	if (n == NULL)
+		return;
+	deleteAll(n->c0);
+	deleteAll(n->c1);
+	delete n;
+}
+
 HCTree::~HCTree()
 {
+	deleteAll(root);
 }
 
 /** Use the Huffman algorithm to build a Huffman coding trie.
