@@ -17,8 +17,9 @@ int main(int argc, char* argv[])
 	HCTree trie;
 	vector<int> freq(256);
 	ifstream f;
+	
 	//open the input file and get all the frequencies
-	f.open(argv[1]);
+	f.open(argv[1], ios::binary);
 	unsigned char nextChar;
 	int nextByte;
 	while ((nextByte = f.get()) != EOF) {
@@ -33,12 +34,13 @@ int main(int argc, char* argv[])
 	
 	//open output file
 	ofstream o;
+	BitOutputStream out(o);
 	o.open(argv[2]);
 	if (!o.is_open())
 		cout << "NOT OPENED" << endl;
 	//write the header
 	for (int i = 0; i < freq.size(); ++i)
-		o << freq[i] << endl;
+		o << freq[i];  //4 byte header
 
 	//open input file again
 	f.open(argv[1]);
@@ -46,7 +48,7 @@ int main(int argc, char* argv[])
 	//encode 
 	while ((nextByte = f.get()) != EOF) {
 		nextChar = (unsigned char)nextByte;
-		trie.encode(nextChar, o);
+		trie.encode(nextChar, out);
 	}
 	f.close();
 	o.close();

@@ -5,9 +5,8 @@
 #include <vector>
 #include <fstream>
 #include "HCNode.hpp"
-//#include "BitInputStream.hpp"
-//#include "BitOutputStream.hpp"
-
+#include "BitOutputStream.hpp"
+#include "BitInputStream.hpp"
 using namespace std;
 
 /** A 'function class' for use as the Compare class in a
@@ -52,7 +51,7 @@ public:
      *  PRECONDITION: build() has been called, to create the coding
      *  tree, and initialize root pointer and leaves vector.
      */
- //   void encode(byte symbol, BitOutputStream& out) const;
+    void encode(byte symbol, BitOutputStream& out) const;
 
     /** Write to the given ofstream
      *  the sequence of bits (as ASCII) coding the given symbol.
@@ -61,14 +60,14 @@ public:
      *  THIS METHOD IS USEFUL FOR THE CHECKPOINT BUT SHOULD NOT 
      *  BE USED IN THE FINAL SUBMISSION.
      */
-    void encode(byte symbol, ofstream& out) const;
+ //   void encode(byte symbol, ofstream& out) const;
 
 
     /** Return symbol coded in the next sequence of bits from the stream.
      *  PRECONDITION: build() has been called, to create the coding
      *  tree, and initialize root pointer and leaves vector.
      */
-   // int decode(BitInputStream& in) const;
+    int decode(BitInputStream& in) const;
 
     /** Return the symbol coded in the next sequence of bits (represented as 
      *  ASCII text) from the ifstream.
@@ -77,7 +76,7 @@ public:
      *  THIS METHOD IS USEFUL FOR THE CHECKPOINT BUT SHOULD NOT BE USED
      *  IN THE FINAL SUBMISSION.
      */
-    int decode(ifstream& in) const;
+ //   int decode(ifstream& in) const;
 
 };
 

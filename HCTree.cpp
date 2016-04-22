@@ -82,14 +82,7 @@ void HCTree::build(const vector<int>& freqs)
 	}
 }
 
-/** Write to the given ofstream
-*  the sequence of bits (as ASCII) coding the given symbol.
-*  PRECONDITION: build() has been called, to create the coding
-*  tree, and initialize root pointer and leaves vector.
-*  THIS METHOD IS USEFUL FOR THE CHECKPOINT BUT SHOULD NOT
-*  BE USED IN THE FINAL SUBMISSION.
-*/
-void HCTree::encode(byte symbol, ofstream & out) const
+void HCTree::encode(byte symbol, BitOutputStream & out) const
 {
 	/* Find the symbol in the leaves vector, and then
 	work backwards from the leave to the root, which will
@@ -99,7 +92,6 @@ void HCTree::encode(byte symbol, ofstream & out) const
 	int index = symbol;
 	HCNode* sym = leaves[index];
 	HCNode* symParent;
-	string encoding;
 	//keep looping til you hit the root
 	while ((symParent = sym->p) != NULL)
 	{
@@ -107,15 +99,68 @@ void HCTree::encode(byte symbol, ofstream & out) const
 		//insert the 0 or 1 at the beginning rather than
 		//the end
 		if (symParent->c0 == sym)
-			encoding.insert(0, "0");
+			out.writeBit(0);
 		else
-			encoding.insert(0, "1");
+			out.writeBit(1);
 		sym = sym->p;
 	}
 	//cout << symbol << ": " << encoding << endl;
-	out << encoding;
 
 }
+
+int HCTree::decode(BitInputStream & in) const
+{
+	HCNode* begin = root;
+	int nextByte;
+	while (!(begin->c0 == NULL && begin->c1 == NULL))
+	{
+		int branch = in.readBit();
+		if (branch == 0)
+			begin = begin->c0;
+		else if (branch == 1)
+			begin = begin->c1;
+		else
+			return 0; //reached the end of file
+	}
+	return begin->symbol;
+}
+
+
+/** Write to the given ofstream
+*  the sequence of bits (as ASCII) coding the given symbol.
+*  PRECONDITION: build() has been called, to create the coding
+*  tree, and initialize root pointer and leaves vector.
+*  THIS METHOD IS USEFUL FOR THE CHECKPOINT BUT SHOULD NOT
+*  BE USED IN THE FINAL SUBMISSION.
+*/
+
+//void HCTree::encode(byte symbol, ofstream & out) const
+//{
+//	/* Find the symbol in the leaves vector, and then
+//	work backwards from the leave to the root, which will
+//	give you the reversed encoding, reverse it, and add it
+//	to the ofstream
+//	*/
+//	int index = symbol;
+//	HCNode* sym = leaves[index];
+//	HCNode* symParent;
+//	string encoding;
+//	//keep looping til you hit the root
+//	while ((symParent = sym->p) != NULL)
+//	{
+//		//if the symbol was a 0 child or a 1 child
+//		//insert the 0 or 1 at the beginning rather than
+//		//the end
+//		if (symParent->c0 == sym)
+//			encoding.insert(0, "0");
+//		else
+//			encoding.insert(0, "1");
+//		sym = sym->p;
+//	}
+//	//cout << symbol << ": " << encoding << endl;
+//	out << encoding;
+//
+//}
 
 /** Return the symbol coded in the next sequence of bits (represented as
 *  ASCII text) from the ifstream.
@@ -124,19 +169,19 @@ void HCTree::encode(byte symbol, ofstream & out) const
 *  THIS METHOD IS USEFUL FOR THE CHECKPOINT BUT SHOULD NOT BE USED
 *  IN THE FINAL SUBMISSION.
 */
-int HCTree::decode(ifstream & in) const
-{
-	HCNode* begin = root;
-	int nextByte;
-	while (!(begin->c0 == NULL && begin->c1 == NULL))
-	{
-		unsigned char branch = (unsigned char)in.get();
-		if (branch == '0')
-			begin = begin->c0;
-		else if (branch == '1')
-			begin = begin->c1;
-		else
-			return 0; //reached the end of file
-	}
-	return begin->symbol;
-}
+//int HCTree::decode(ifstream & in) const
+//{
+//	HCNode* begin = root;
+//	int nextByte;
+//	while (!(begin->c0 == NULL && begin->c1 == NULL))
+//	{
+//		unsigned char branch = (unsigned char)in.get();
+//		if (branch == '0')
+//			begin = begin->c0;
+//		else if (branch == '1')
+//			begin = begin->c1;
+//		else
+//			return 0; //reached the end of file
+//	}
+//	return begin->symbol;
+//}
