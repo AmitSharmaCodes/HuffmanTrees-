@@ -2,6 +2,7 @@
 #define HCTREE_HPP
 
 #include <queue>
+#include <stack>
 #include <vector>
 #include <fstream>
 #include "HCNode.hpp"
@@ -29,11 +30,13 @@ class HCTree {
 private:
     HCNode* root;
     vector<HCNode*> leaves;
+	//vector<stack<int>> codes;
 
 	static void deleteAll(HCNode* n);
 public:
     explicit HCTree() : root(0) {
         leaves = vector<HCNode*>(256, (HCNode*) 0);
+	//	codes = vector<stack<int>>(256);
     }
 
     ~HCTree();
@@ -51,7 +54,7 @@ public:
      *  PRECONDITION: build() has been called, to create the coding
      *  tree, and initialize root pointer and leaves vector.
      */
-    void encode(byte symbol, BitOutputStream& out) const;
+    void encode(byte symbol, BitOutputStream& out);
 
     /** Write to the given ofstream
      *  the sequence of bits (as ASCII) coding the given symbol.

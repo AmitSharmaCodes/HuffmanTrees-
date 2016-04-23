@@ -1,6 +1,6 @@
 #include "HCTree.hpp"
 #include <string>
-
+#include <stack>
 //recursively delete all the nodes
 void HCTree::deleteAll(HCNode * n)
 {
@@ -74,7 +74,13 @@ void HCTree::build(const vector<int>& freqs)
 			// the symbol is arbitrarily from the zero child
 			// and make sure the children know who the parent is
 			//then add the combine back into the queue
-			combine = new HCNode((zero->count + one->count), zero->symbol, zero, one);
+			unsigned char sym;
+			if (zero->symbol < one->symbol)
+				sym = zero->symbol;
+			else
+				sym = one->symbol;
+
+			combine = new HCNode((zero->count + one->count), sym, zero, one);
 			zero->p = combine;
 			one->p = combine;
 			que.push(combine);
@@ -82,7 +88,7 @@ void HCTree::build(const vector<int>& freqs)
 	}
 }
 
-void HCTree::encode(byte symbol, BitOutputStream & out) const
+void HCTree::encode(byte symbol, BitOutputStream & out)
 {
 	/* Find the symbol in the leaves vector, and then
 	work backwards from the leave to the root, which will
@@ -93,16 +99,31 @@ void HCTree::encode(byte symbol, BitOutputStream & out) const
 	HCNode* sym = leaves[index];
 	HCNode* symParent;
 	//keep looping til you hit the root
+	stack<int> st;
+	/*if (!codes[index].empty())
+	{
+		st = codes[index];
+	}
+	else
+	{*/
 	while ((symParent = sym->p) != NULL)
 	{
 		//if the symbol was a 0 child or a 1 child
 		//insert the 0 or 1 at the beginning rather than
 		//the end
+
 		if (symParent->c0 == sym)
-			out.writeBit(0);
+			st.push(0);
 		else
-			out.writeBit(1);
+			st.push(1);
 		sym = sym->p;
+	}
+	//	codes[index] = st;
+	//}
+	while (!st.empty()) {
+		out.writeBit(st.top());
+		st.pop();
+
 	}
 	//cout << symbol << ": " << encoding << endl;
 

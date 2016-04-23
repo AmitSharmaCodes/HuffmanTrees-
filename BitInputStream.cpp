@@ -10,8 +10,8 @@ int BitInputStream::readBit()
 {
 	if (nbits == 0)
 		fill();
-	unsigned int mask = 1 << 7;
-	int value = ((buf & mask) >> 7);
-	buf = buf << 1;
+		int value = buf & (1 << (nbits - 1));
+	value = value >> (nbits - 1);
+	--nbits;
 	return value;
 }

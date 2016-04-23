@@ -7,7 +7,7 @@ using namespace std;
 
 class BitOutputStream {
 private:
-	char buf;	  // one byte buffer of bits
+	unsigned char buf;	  // one byte buffer of bits
 	int nbits;    // how many bits have been written to buf
 	ostream& out; // reference to the output stream to use
 

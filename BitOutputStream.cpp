@@ -9,8 +9,8 @@ void BitOutputStream::flush()
 
 void BitOutputStream::writeBit(int i)
 {
+	buf = (buf | (i << (7 - nbits)));
+	++nbits;
 	if (nbits == 8)
 		flush();
-	buf = (buf << 1) | i;
-	++nbits;
 }

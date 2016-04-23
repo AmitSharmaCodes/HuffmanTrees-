@@ -8,7 +8,7 @@ class BitInputStream {
 
 private:
 
-	char buf; // one byte buffer of bits
+	unsigned char buf; // one byte buffer of bits
 	int nbits; // how many bits have been read from buf
 	std::istream & in;
 
