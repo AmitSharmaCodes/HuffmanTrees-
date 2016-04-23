@@ -6,7 +6,7 @@
 
 using namespace std;
 
-
+//reads first 3 bytes of a file into an integer
 int threebytestoInt(BitInputStream in)
 {
 	int value = 0;

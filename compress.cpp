@@ -5,6 +5,7 @@
 #include "HCTree.hpp"
 using namespace std;
 
+//loads the first 3 bytes of a integer into a file
 void integerto3byte(int i, BitOutputStream out) {
 	int value = 0;
 	for (int i = 0; i < 12; i++) {
@@ -22,21 +23,7 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	//ofstream numFile;
-	//int num = 12345;
-	//numFile.open(argv[2]);
-	//numFile.write((char*)&num, sizeof(num));
-	//numFile.close();
-
-	//// Getting the number back!
-
-	//ifstream numFileIn;
-	//numFileIn.open(argv[2]);
-	//int readN;
-	//numFileIn.read((char*)&readN, sizeof(readN));
-	//cout << readN << endl;
-	//numFileIn.close();
-
+	
 	HCTree trie;
 	vector<int> freq(256);
 	ifstream f;
@@ -79,9 +66,9 @@ int main(int argc, char* argv[])
 		nextChar = (unsigned char)nextByte;
 		trie.encode(nextChar, out);
 		++characterCount;
-		if (characterCount % 10000 == 0) {
-			cout << "Characters Processed: " << characterCount << endl;
-		}
+	//	if (characterCount % 10000 == 0) { //for checking progress on long files
+	//		cout << "Characters Processed: " << characterCount << endl;
+	//	}
 	}
 	out.flush();
 	f.close();
